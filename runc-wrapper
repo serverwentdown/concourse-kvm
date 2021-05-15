@@ -4,7 +4,14 @@ RUNC=${RUNC:=runc}
 
 if [ -f config.json ]; then
 	mv config.json config.old.json
-	jq -c '.mounts |= . + [{ "destination": "/dev/kvm", "type": "bind", "source": "/dev/kvm", "options": [ "bind", "rw" ] }]' config.old.json > config.json
+	jq -c '.mounts |= . + [
+		{
+			"destination": "/dev/kvm",
+			"type": "bind",
+			"source": "/dev/kvm",
+			"options": [ "bind", "rw" ]
+		}
+	]' config.old.json > config.json
 fi
 
 exec $RUNC "$@"
