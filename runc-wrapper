@@ -11,7 +11,17 @@ if [ -f config.json ]; then
 			"source": "/dev/kvm",
 			"options": [ "bind", "rw" ]
 		}
+	] |
+	.linux.resources.devices |= . + [
+		{
+			"allow": true,
+			"type": "c",
+			"major": 10,
+			"minor": 232,
+			"access": "rwm"
+		}
 	]' config.old.json > config.json
+	cp config.json /tmp/config.json
 fi
 
 exec $RUNC "$@"
