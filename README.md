@@ -1,5 +1,5 @@
 
-# `serverwentdown/concourse-kvm`
+# [serverwentdown/concourse-kvm](https://hub.docker.com/r/serverwentdown/concourse-kvm)
 
 Ugly patch to concourse's Docker image to mount the KVM device, until concourse/concourse#2784 is resolved.
 
