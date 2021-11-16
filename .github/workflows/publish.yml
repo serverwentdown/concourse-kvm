@@ -1,0 +1,53 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Docker Login
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Generate Docker labels
+      uses: docker/metadata-action@v3
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      id: meta
+
+    - name: Build and push release image
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        bulid-args:
+        - base=concourse/concourse:latest
+        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        labels: ${{ steps.meta.outputs.labels }}
+
+    - name: Build and push dev image
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        bulid-args:
+        - base=concourse/concourse-dev:latest
+        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev
+        labels: ${{ steps.meta.outputs.labels }}
+
+
+# vim: set et ts=2 sw=2:
