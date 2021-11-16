@@ -37,8 +37,8 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        bulid-args:
-        - base=concourse/concourse:latest
+        build-args: |
+          base=concourse/concourse:latest
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -46,8 +46,8 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        bulid-args:
-        - base=concourse/concourse-dev:latest
+        build-args: |
+          base=concourse/concourse-dev:latest
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev
         labels: ${{ steps.meta.outputs.labels }}
 
